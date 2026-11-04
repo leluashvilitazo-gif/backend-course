@@ -1,3 +1,14 @@
+def battle(a,b):
+    while a.is_alive and b.is_alive:
+        a.attack(b)
+        if b.is_alive == False:
+            return a
+        else:
+            b.attack(a)
+        if a.is_alive == False:
+            return b
+        
+
 def log_action(func):
     def wrapper(self, *args, **kwargs):
         print(f"{self.name} → {func.__name__}")
@@ -94,16 +105,11 @@ class Inventory:
     def __len__(self):
         return len(self.items)
 
-inv = Inventory()
-inv.add(name="sword", kind="weapon", power=10)
-inv.add(name="potion", kind="heal", power=30)
+tariel = Warrior("Tariel", hp=120, strength=15)
+nestan = Mage("Nestan", hp=80, mana=50)
 
-print(len(inv))                  # 2
-print(inv.find(kind="weapon"))   # [{'name': 'sword', 'kind': 'weapon', 'power': 10}]
-print(inv.find(kind="heal", power=30))   # [{'name': 'potion', 'kind': 'heal', 'power': 30}]
+tariel.attack(nestan)
 
-t = Warrior("Tariel")
-n = Mage("Nestan")
-t.attack(n)                      # Tariel → attack
-            
-
+print(nestan)
+print(nestan.is_alive)
+print(Character.count)
