@@ -1,10 +1,27 @@
 class Character:
     count = 0
 
+    @classmethod
+    def from_string(cls, data):
+        name, hp = data.split(';')
+        return cls(name, int(hp))
+
+    @staticmethod
+    def is_valid_name(name):
+            if len(name) < 2 or len(name) > 20:
+                return False
+            else:
+                return True
+    
+    def __eq__(self, other):
+        return self.name == other.name and self.level == other.level
+                
+
     def __init__ (self, name, hp=100, level=1):
         self.name = name
         self.hp = hp
         self.level = level
+        self.max_hp = hp
         Character.count +=1
     
     def __str__(self):
@@ -44,12 +61,10 @@ class Mage(Character):
         return f"{super().__str__()} MP {self.mana}"
 
 
-t = Warrior("Tariel", hp=120, strength=15)
-n = Mage("Nestan", hp=80, mana=15)
+class HealerMixin:
+    def heal(self, target, amount):
+        target.hp = min(target.max_hp, target.hp + amount)
 
-t.attack(n)
-print(n)    # Nestan (Lv 1, HP 65) MP 15
+class Priest(HealerMixin, Mage):
+    pass
 
-n.attack(t)   # 20 ზიანი, mana-ს 5 რჩება
-n.attack(t)   # mana არ ჰყოფნის: 5 ზიანი
-print(t)    # Tariel (Lv 1, HP 95)
